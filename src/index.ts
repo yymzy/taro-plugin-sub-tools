@@ -26,3 +26,5 @@ export function fixSubPackagesPath(path, subPackages) {
     }
     return path;
 }
+
+export default {}
