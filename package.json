@@ -1,8 +1,8 @@
 {
   "name": "taro-plugin-sub-tools",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "index.js",
     "dist"
