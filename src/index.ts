@@ -6,7 +6,11 @@
  * @returns 
  */
 export function createSubRoot({ outputRoot = "auto", sourceRoot }, index) {
-    return (outputRoot === 'auto' ? `${sourceRoot}-${index}` : outputRoot).replace(/\//g, "-");
+    const subRoot = (outputRoot === 'auto' ? `${sourceRoot}-${index}` : outputRoot).replace(/\//g, "-");
+    return {
+        subRoot,
+        path: `${subRoot}/${sourceRoot}`
+    };
 }
 
 /**
@@ -21,7 +25,7 @@ export function fixSubPackagesPath(path, subPackages) {
         const { root: sourceRoot, pages, outputRoot } = subPackages[i];
         const url = pages.find(item => `/${sourceRoot}/${item}` === path);
         if (url) {
-            return `/${createSubRoot({ outputRoot, sourceRoot }, i)}/${url}`;
+            return `/${createSubRoot({ outputRoot, sourceRoot }, i).path}/${url}`;
         }
     }
     return path;
