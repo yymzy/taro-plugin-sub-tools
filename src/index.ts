@@ -5,11 +5,18 @@
  * @param index 
  * @returns 
  */
-export function createSubRoot({ outputRoot = "auto", sourceRoot }, index) {
-    const subRoot = (outputRoot === 'auto' ? `${sourceRoot}-${index}` : outputRoot).replace(/\//g, "-");
+export function createSubRoot({ outputRoot = "auto", sourceRoot = "" }, index) {
+    const subRoot = (outputRoot === 'auto' ? `${sourceRoot || 'sub'}-${index}` : outputRoot).replace(/\//g, "-");
+    let outputPrefix = subRoot;
+    let sourcePrefix = "";
+    if (sourceRoot) {
+        outputPrefix = `${subRoot}/${sourceRoot}`;
+        sourcePrefix = `${sourceRoot}/`
+    }
     return {
         subRoot,
-        path: `${subRoot}/${sourceRoot}`
+        outputPrefix,
+        sourcePrefix
     };
 }
 
@@ -21,11 +28,14 @@ export function createSubRoot({ outputRoot = "auto", sourceRoot }, index) {
  * @returns 
  */
 export function fixSubPackagesPath(path, subPackages) {
-    for (let i = 0, len = subPackages.length; i < len; i++) {
+    for (let i = 0, iLen = subPackages.length; i < iLen; i++) {
         const { root: sourceRoot, pages, outputRoot } = subPackages[i];
-        const url = pages.find(item => `/${sourceRoot}/${item}` === path);
-        if (url) {
-            return `/${createSubRoot({ outputRoot, sourceRoot }, i).path}/${url}`;
+        const { sourcePrefix, outputPrefix } = createSubRoot({ outputRoot, sourceRoot }, i);
+        for (let p = 0, pLen = pages.length; p < pLen; p++) {
+            const pagePath = pages[p];
+            if (`/${sourcePrefix + pagePath}` === path) {
+                return `/${outputPrefix}/${pagePath}`;
+            }
         }
     }
     return path;
