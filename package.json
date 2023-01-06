@@ -1,6 +1,6 @@
 {
   "name": "taro-plugin-sub-tools",
-  "version": "0.0.2-alpha.0",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -20,7 +20,8 @@
   "scripts": {
     "pre-build": "rimraf dist",
     "dev": "yarn pre-build && rollup -c -w",
-    "build": "yarn pre-build && tsc -m commonjs && rollup -c",
+    "build": "yarn pre-build && NODE_ENV=production rollup -c",
+    "build:c": "npm run build && tsc -m commonjs",
     "release": "node scripts/release",
     "lint": "eslint src/**/*.ts --max-warnings 0",
     "prettier": "prettier src/**/*.ts --write",
